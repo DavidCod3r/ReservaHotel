@@ -30,22 +30,16 @@ namespace Hotel
                 Console.Write("Check-out (dd/MM/yyyy): ");
                 checkOut = DateTime.Parse(Console.ReadLine());
 
-                DateTime now = DateTime.Now;
-
-                if(checkIn < now || checkOut < now)
+                string error = res.UpdateDates(checkIn, checkOut);
+                if(error != null)
                 {
-                    Console.WriteLine("Error in reservation: Reservation dates for update must be future dates.");
-                }
-                else if (checkOut <= checkIn)
-                {
-                    Console.WriteLine("Error in reservation.");
+                    Console.WriteLine("Error: " + error);
                 }
                 else
                 {
-                    res.UpdateDates(checkIn, checkOut);
                     Console.WriteLine(res);
                 }
-
+                 
             }
 
         }
