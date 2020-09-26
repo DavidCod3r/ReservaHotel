@@ -1,4 +1,5 @@
 ﻿using Hotel.Entities;
+using Hotel.Entities.Exceptions;
 using System;
 
 namespace Hotel
@@ -7,19 +8,16 @@ namespace Hotel
     {
         static void Main(string[] args)
         {
-            Console.Write("Room number: ");
-            int roomNumber = int.Parse(Console.ReadLine());
-            Console.Write("Check-in (dd/MM/yyyy): ");
-            DateTime checkIn = DateTime.Parse(Console.ReadLine());
-            Console.Write("Check-out (dd/MM/yyyy): ");
-            DateTime checkOut = DateTime.Parse(Console.ReadLine());
+            try
+            {
+                Console.Write("Room number: ");
+                int roomNumber = int.Parse(Console.ReadLine());
+                Console.Write("Check-in (dd/MM/yyyy): ");
+                DateTime checkIn = DateTime.Parse(Console.ReadLine());
+                Console.Write("Check-out (dd/MM/yyyy): ");
+                DateTime checkOut = DateTime.Parse(Console.ReadLine());
 
-            if(checkOut <= checkIn)
-            {
-                Console.WriteLine("Error in reservation.");
-            }
-            else
-            {
+
                 Reservation res = new Reservation(roomNumber, checkIn, checkOut);
                 Console.WriteLine(res);
                 Console.WriteLine();
@@ -30,16 +28,13 @@ namespace Hotel
                 Console.Write("Check-out (dd/MM/yyyy): ");
                 checkOut = DateTime.Parse(Console.ReadLine());
 
-                string error = res.UpdateDates(checkIn, checkOut);
-                if(error != null)
-                {
-                    Console.WriteLine("Error: " + error);
-                }
-                else
-                {
-                    Console.WriteLine(res);
-                }
-                 
+                res.UpdateDates(checkIn, checkOut);
+
+                Console.WriteLine(res);
+            }
+            catch (DomainException e)
+            {
+                Console.WriteLine("Error in reservation: " + e.Message);
             }
 
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hotel.Entities.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
@@ -13,6 +14,12 @@ namespace Hotel.Entities
 
         public Reservation(int roomNumber, DateTime checkIn, DateTime checkOut)
         {
+
+            if (checkOut <= checkIn)
+            {
+                throw new DomainException("Error in reservation.");
+            }
+
             RoomNumber = roomNumber;
             CheckIn = checkIn; 
             CheckOut = checkOut;
@@ -24,22 +31,21 @@ namespace Hotel.Entities
             return (int)duration.TotalDays;
         }
 
-        public string UpdateDates(DateTime checkIn, DateTime checkOut)
+        public void UpdateDates(DateTime checkIn, DateTime checkOut)
         {
             DateTime now = DateTime.Now;
 
             if (checkIn < now || checkOut < now)
             {
-                return "Error in reservation: Reservation dates for update must be future dates.";
+                throw new DomainException("Error in reservation: Reservation dates for update must be future dates.");
             }
             if (checkOut <= checkIn)
             {
-                return "Error in reservation.";
+                throw new DomainException("Error in reservation.");
             }
 
             CheckIn = checkIn;
             CheckOut = checkOut;
-            return null;
         }
 
         public override string ToString()
